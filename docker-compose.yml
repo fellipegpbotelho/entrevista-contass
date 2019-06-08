@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  mysql:
+    build:
+      context: ./docker/mysql
+    container_name: "contass-mysql"
+    restart: "always"
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=contass
+      - MYSQL_USER=contass
+      - MYSQL_PASSWORD=contass
+    volumes:
+      - ./docker/mysql/data:/var/lib/mysql
+  phpmyadmin:
+    build:
+      context: ./docker/phpmyadmin
+    container_name: "contass-phpmyadmin"
+    restart: "always"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    ports:
+      - "8080:80"
+    links:
+      - mysql
