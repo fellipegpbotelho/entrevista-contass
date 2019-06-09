@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { confirmAlert } from "react-confirm-alert";
 import { ToastContainer, toast } from "react-toastify";
 import { format } from "date-fns";
 import axios from "axios";
 
 import "./tasks.css";
 import "react-toastify/dist/ReactToastify.min.css";
+import "react-confirm-alert/src/react-confirm-alert.css";
 
 import Form from "./Form";
 import Table from "./Table";
@@ -55,6 +57,11 @@ export default function Tasks() {
       toast("Tarefa salva 😃");
 
       fetchTasks();
+      setErrors({});
+      setTaskId("");
+      setDescription("");
+      setDate("");
+      setUser("");
       setLoading(false);
     } catch (error) {
       setErrors(error.response.data.errors);
@@ -73,17 +80,37 @@ export default function Tasks() {
     setTaskId(taskId);
     setDescription(description);
     setDate(format(date, "DD/MM/YYYY"));
+    setErrors({});
     setLoading(false);
   }
 
-  async function handleDelete(id) {
-    if (confirm("Deseja realmente remover esta tarefa?")) {
-      setLoading(true);
-      await api.delete(`tasks/${id}`);
-      fetchTasks();
-      setLoading(false);
-      toast("Tarefa excluída 😃");
-    }
+  function handleDelete(id) {
+    confirmAlert({
+      title: "Excluir tarefa.",
+      message: "Você tem certeza disso?",
+      buttons: [
+        {
+          label: "Sim",
+          onClick: async () => {
+            setLoading(true);
+            await api.delete(`tasks/${id}`);
+            fetchTasks();
+            setLoading(false);
+            setTaskId("");
+            setDescription("");
+            setDate("");
+            setUser("");
+            toast("Tarefa excluída 😃");
+          }
+        },
+        {
+          label: "Não",
+          onClick: () => {
+            return;
+          }
+        }
+      ]
+    });
   }
 
   function handleReset() {
