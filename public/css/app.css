@@ -10646,3 +10646,11 @@ a.text-dark:focus {
   }
 }
 
+body {
+  background-color: gainsboro;
+}
+
+button {
+  margin-right: 5px;
+}
+
