@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Domains\Task\TaskFormRequest;
 use App\Domains\Task\TaskRepository;
+use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
@@ -52,7 +53,7 @@ class TaskController extends Controller
         return response()->json($taskUpdated);
     }
 
-    public function destroy(TaskFormRequest $request, $taskId)
+    public function destroy(Request $request, $taskId)
     {
         $task = $this->taskRepository->find($taskId);
 
